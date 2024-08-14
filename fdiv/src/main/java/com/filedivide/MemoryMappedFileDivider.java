@@ -15,13 +15,10 @@ public class MemoryMappedFileDivider {
     public static void main(String[] args) throws NumberFormatException, FileNotFoundException, IOException {
         // Path of the file to be divided
         String inputFilePath = "input.txt";
-
         // Base path for the output files
         String outputFilePath = "output";
-
         // Lines per file
         int linesPerFile = Integer.parseInt(FileDivideProperties.getProperties().getProperty("linesPerFile"));
-
         divideFile(inputFilePath, outputFilePath, linesPerFile);
 
     }
