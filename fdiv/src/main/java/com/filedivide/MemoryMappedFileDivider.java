@@ -5,10 +5,11 @@ import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.io.PrintWriter;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
 public class MemoryMappedFileDivider {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NumberFormatException, FileNotFoundException, IOException {
         // Path of the file to be divided
         String inputFilePath = "input.txt";
 
@@ -16,7 +17,7 @@ public class MemoryMappedFileDivider {
         String outputFilePath = "output";
 
         // Lines per file
-        int linesPerFile = 10;
+        int linesPerFile = Integer.parseInt(FileDivideProperties.getProperties().getProperty("linesPerFile"));
 
         try {
             divideFile(inputFilePath, outputFilePath, linesPerFile);
