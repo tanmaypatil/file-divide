@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -87,7 +88,7 @@ class AppTest {
     @Test
     void testMulti() {
         char ch = '\n';
-        String multiLineString = """ 
+        String multiLineString = """
                 This is a multi-line string.
                 It can span multiple lines,
                 and it preserves the formatting
@@ -103,7 +104,7 @@ class AppTest {
     @Test
     void testMulti1() {
         char ch = '\n';
-        String multiLineString = """ 
+        String multiLineString = """
                 This is a multi-line string.
                 It can span multiple lines,
                 and it preserves the formatting
@@ -111,13 +112,47 @@ class AppTest {
                 You can include "quotes" and special characters like \t
                 """;
         int index = FileDivider.ordinalIndexOf(multiLineString, "\n", 0);
-        String str = multiLineString.substring(0, index+1);
+        String str = multiLineString.substring(0, index + 1);
         System.err.println(str);
         String result = """
                 This is a multi-line string.
                 """;
         Assertions.assertEquals(result, str);
-        
+
+    }
+
+    // 2 lines per file
+    @Test
+    void testMultiLineSplit() {
+        String multiLineString = """
+            This is a multi-line string.
+            It can span multiple lines,
+            and it preserves the formatting
+            exactly as you write it.
+            You can include "quotes" and special characters like \t
+            """;
+
+        List<String> list = FileDivider.divideStr(multiLineString,2);
+        System.out.println("list "+list.toString());
+        Assertions.assertTrue(list.size()== 3);
+    }
+
+
+   // 1 line per file
+    @Test
+    void testMultiLineSplit1() {
+        String multiLineString = """
+            This is a multi-line string.
+            It can span multiple lines,
+            and it preserves the formatting
+            exactly as you write it.
+            You can include "quotes" and special characters like \t
+            """;
+
+        List<String> list = FileDivider.divideStr(multiLineString,1);
+        System.out.println("list "+list.toString());
+        Assertions.assertTrue(list.size()== 5);
+
     }
 
 }

@@ -14,6 +14,8 @@ import java.io.FileWriter;
 import java.nio.file.*;
 import java.io.BufferedInputStream;
 import java.nio.charset.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class FileDivider {
     public static void main(String[] args) throws NumberFormatException, FileNotFoundException, IOException {
@@ -69,6 +71,31 @@ public class FileDivider {
         return pos;
     }
 
+    public static List<String> divideStr(String str, int linesPerFile) {
+        ArrayList<String> chunkList = new ArrayList<String>();
+        char ch = '\n';
+        long lineCount = 0;
+        lineCount += countOccurrences(str, ch);
+        System.out.println( "dividestr  : "+ lineCount);
+        int beginIndex = 0;
+        int endIndex = 0;
+        int i = 0;
+        for (i = 0; i * linesPerFile < lineCount && (i + 1) * linesPerFile <= lineCount; i++) {
+            endIndex = FileDivider.ordinalIndexOf(str, "\n", i * linesPerFile + linesPerFile - 1 );
+            String chunk = str.substring(beginIndex, endIndex + 1);
+            chunkList.add(chunk);
+            beginIndex = endIndex + 1;
+        }
+        // Residual chunk
+        if ( i * linesPerFile < lineCount && (i + 1) * linesPerFile > lineCount){
+            endIndex = FileDivider.ordinalIndexOf(str, "\n", (int) lineCount - 1 );
+            String chunk = str.substring(beginIndex, endIndex + 1);
+            chunkList.add(chunk);
+
+        }
+        return chunkList;
+    }
+
     public static long divideFileNio(String inputFilePath, String outputFilePath, int linesPerFile) throws IOException {
         Path path = Paths.get(inputFilePath);
         long lineCount = 0;
@@ -87,15 +114,16 @@ public class FileDivider {
                 lineCount += countOccurrences(str, ch) + residualCount;
                 str = str + residue;
                 int i = 0;
-                for (i = 0; i * linesPerFile < lineCount && (i + 1)* linesPerFile  < lineCount; i++) {
+                for (i = 0; i * linesPerFile < lineCount && (i + 1) * linesPerFile < lineCount; i++) {
                     int beginIndex = FileDivider.ordinalIndexOf(str, "\n", i);
                     int endIndex = FileDivider.ordinalIndexOf(str, "\n", i * linesPerFile);
                     String chunk = str.substring(beginIndex, endIndex + 1);
                     /*
-                    String outputFileName = outputFilePath + "\\" + "output_file_nio_" + fileCount + ".txt";
-                    Path writePath = Paths.get(outputFileName);
-                    Files.write(writePath, chunk.getBytes());
-                    */
+                     * String outputFileName = outputFilePath +
+                     * "\\" + "output_file_nio_" + fileCount + ".txt";
+                     * Path writePath = Paths.get(outputFileName);
+                     * Files.write(writePath, chunk.getBytes());
+                     */
                 }
                 // check for residual lines
                 if (i * linesPerFile < lineCount && i * linesPerFile + linesPerFile > lineCount) {
