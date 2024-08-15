@@ -1,6 +1,10 @@
 # Compiled class file
 *.class
 
+# input and output file
+BANKDIR*.txt
+output*.txt
+
 # Log file
 *.log
 
